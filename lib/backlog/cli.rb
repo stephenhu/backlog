@@ -24,9 +24,10 @@ module Backlog
       filenames.each do |f|
 
         c = Code.new(f)
- 
-        todo  = c.find(/[#]+[\s\t]*(TODO)/)
-        tasks = parse(todo)
+
+        tasks = c.get_tasks
+
+        store(tasks)
 
       end
 
@@ -34,21 +35,11 @@ module Backlog
 
     no_tasks do
 
-      def parse(todo)
+      def store(tasks)
 
-        todo.each do |t|
-
-          tmp = t.sub( /[#]+/, "" )
-          store(tmp.sub( /(TODO:|TODO)/, "" ).strip)
-
-        end
-
-      end
-
-      def store(task)
-
+        # TODO check for duplicates
         f = File.open( @backlog, "a+" )
-        f.write("#{task}\n")
+        tasks.each { |t| f.write("#{t}\n") }
         f.close
 
       end

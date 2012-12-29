@@ -18,6 +18,24 @@ module Backlog
 
     end
 
+    def get_tasks
+
+      tasks = Array.new
+
+      todo = find(/[#]+[\s\t]*(TODO)/)
+
+      todo.each do |t|
+
+        tmp = t.sub( /[#]+/, "" )
+        csv = tmp.sub( /(TODO:|TODO)/, "" ).strip + ", #{@filename}"
+        tasks << csv
+
+      end
+
+      return tasks
+
+    end
+
   end
 
 end
